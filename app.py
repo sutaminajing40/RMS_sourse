@@ -5,6 +5,7 @@ import streamlit as st
 import pandas as pd
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from flask import session
 
 
 
@@ -16,7 +17,7 @@ def main():
 
     if submitted:
         scope = "playlist-modify-public"
-        cache_handler = StreamlitCacheHandler(st.session)  # same as the FlaskSessionCacheHandler
+        cache_handler = StreamlitCacheHandler(session)  # same as the FlaskSessionCacheHandler
         auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
                                                                                 cache_handler=cache_handler,
                                                                                 show_dialog=True)
@@ -65,7 +66,7 @@ class StreamlitCacheHandler(spotipy.cache_handler.CacheHandler):
             self.session["token_info"] = token_info
         except Exception as e:
             print("Error saving token to cache: " + str(e))
-            
+
 #初期表示
 def initial_display():
     #タイトル表示
