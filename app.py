@@ -15,9 +15,23 @@ def main():
         submitted = st.form_submit_button("送信")
 
     if submitted:
-        #API認証
-        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(redirect_uri='https://sutaminajing40-rms-sourse-app-ylpo8z.streamlit.app/',
-                                                       scope='playlist-modify-public'))
+        scope = "playlist-modify-public"
+        cache_handler = StreamlitCacheHandler(st.session)  # same as the FlaskSessionCacheHandler
+        auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
+                                                                                cache_handler=cache_handler,
+                                                                                show_dialog=True)
+        # if there is no cached token, open the sign in page
+        if not auth_manager.validate_token(cache_handler.get_cached_token()):
+            auth_url = auth_manager.get_authorize_url()  # log in url
+
+        # if you're redirected from the sign in page, there is a code in the url
+        if 'code' in st.experimental_get_query_params():  
+            auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
+            sp = spotipy.Spotify(auth_manager=auth_manager)  
+        else:  # if no code, add a button linking to the log in url
+            st.add_button(auth_url, 'Log in')  # this adds a button linking to the authorization page
+            return sp
+        
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
         with st.spinner('楽曲情報取得中...'):
@@ -29,6 +43,29 @@ def main():
 
 
 
+class StreamlitCacheHandler(spotipy.cache_handler.CacheHandler):
+    """
+    A cache handler that stores the token info in the session framework
+    provided by streamlit.
+    """
+    def __init__(self, session):
+        self.session = session
+
+    def get_cached_token(self):
+        token_info = None
+        try:
+            token_info = self.session["token_info"]
+        except KeyError:
+            print("Token not found in the session")
+
+        return token_info
+
+    def save_token_to_cache(self, token_info):
+        try:
+            self.session["token_info"] = token_info
+        except Exception as e:
+            print("Error saving token to cache: " + str(e))
+            
 #初期表示
 def initial_display():
     #タイトル表示
