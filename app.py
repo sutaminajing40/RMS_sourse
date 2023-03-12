@@ -10,10 +10,11 @@ from spotipy.oauth2 import SpotifyOAuth
 
 
 def main():
+    sp = authorization()
     with st.form('送信フォーム'):
         URL,username,genre,tempo,energy = initial_display()
         submitted = st.form_submit_button("送信")
-        sp = authorization()
+        
 
     if submitted:
         
