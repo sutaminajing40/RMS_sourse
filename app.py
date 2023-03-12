@@ -15,22 +15,8 @@ def main():
         submitted = st.form_submit_button("送信")
 
     if submitted:
-        scope = "playlist-modify-public"
-        cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
-        auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
-                                                   cache_handler=cache_handler,
-                                                   show_dialog=True)
-        # if there is no cached token, open the sign in page
-        if not auth_manager.validate_token(cache_handler.get_cached_token()):
-            auth_url = auth_manager.get_authorize_url()  # log in url
+        sp = authorization()
 
-        # if you're redirected from the sign in page, there is a code in the url
-        if 'code' in st.experimental_get_query_params():  
-            auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
-            sp = spotipy.Spotify(auth_manager=auth_manager)  
-        else:  # if no code, add a button linking to the log in url
-            st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
-        
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
         with st.spinner('楽曲情報取得中...'):
@@ -64,6 +50,25 @@ class StreamlitCacheHandler(spotipy.cache_handler.CacheHandler):
             self.session["token_info"] = token_info
         except Exception as e:
             print("Error saving token to cache: " + str(e))
+
+
+def authorization():
+    scope = "playlist-modify-public"
+    cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
+    auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
+                                                cache_handler=cache_handler,
+                                                show_dialog=True)
+    # if there is no cached token, open the sign in page
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        auth_url = auth_manager.get_authorize_url()  # log in url
+
+    # if you're redirected from the sign in page, there is a code in the url
+    if 'code' in st.experimental_get_query_params():  
+        auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
+        sp = spotipy.Spotify(auth_manager=auth_manager)  
+    else:  # if no code, add a button linking to the log in url
+        st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
+    return sp
 
 #初期表示
 def initial_display():
