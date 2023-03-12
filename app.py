@@ -19,8 +19,7 @@ def main():
         cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
         auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
                                                    cache_handler=cache_handler,
-                                                   show_dialog=True,
-                                                   redirect_uri='https://sutaminajing40-rms-sourse-app-ylpo8z.streamlit.app/')
+                                                   show_dialog=True)
         # if there is no cached token, open the sign in page
         if not auth_manager.validate_token(cache_handler.get_cached_token()):
             auth_url = auth_manager.get_authorize_url()  # log in url
