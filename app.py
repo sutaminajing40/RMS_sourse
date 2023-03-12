@@ -70,7 +70,7 @@ def authorization():
             auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         else:  # if no code, add a button linking to the log in url
-            if st.button('Open browser'):
+            if st.button('Log in'):
                 webbrowser.open_new_tab(auth_url) # this adds a button linking to the authorization page
                 return sp
 
