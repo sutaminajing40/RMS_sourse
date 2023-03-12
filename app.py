@@ -30,7 +30,7 @@ def main():
             auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         else:  # if no code, add a button linking to the log in url
-            st.add_button(auth_url, 'Log in')  # this adds a button linking to the authorization page
+            st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
         
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
