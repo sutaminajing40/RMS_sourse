@@ -4,6 +4,7 @@ from sklearn.preprocessing import MinMaxScaler
 import streamlit as st
 import pandas as pd
 import spotipy
+import webbrowser
 from spotipy.oauth2 import SpotifyOAuth
 
 
@@ -69,9 +70,9 @@ def authorization():
             auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         else:  # if no code, add a button linking to the log in url
-            button = st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
-    if button:
-        return sp
+            if st.button('Open browser'):
+                webbrowser.open_new_tab(auth_url) # this adds a button linking to the authorization page
+                return sp
 
 
 #初期表示
