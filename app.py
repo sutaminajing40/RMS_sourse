@@ -5,7 +5,6 @@ import streamlit as st
 import pandas as pd
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from flask import session
 
 
 
@@ -17,7 +16,7 @@ def main():
 
     if submitted:
         scope = "playlist-modify-public"
-        cache_handler = StreamlitCacheHandler(session)  # same as the FlaskSessionCacheHandler
+        cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
         auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
                                                    cache_handler=cache_handler,
                                                    show_dialog=True,
@@ -32,7 +31,6 @@ def main():
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         else:  # if no code, add a button linking to the log in url
             st.add_button(auth_url, 'Log in')  # this adds a button linking to the authorization page
-            return sp
         
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
