@@ -62,13 +62,14 @@ def authorization():
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         auth_url = auth_manager.get_authorize_url()  # log in url
 
-    # if you're redirected from the sign in page, there is a code in the url
-    if 'code' in st.experimental_get_query_params():  
-        auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
-        sp = spotipy.Spotify(auth_manager=auth_manager)  
-    else:  # if no code, add a button linking to the log in url
-        st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
+        # if you're redirected from the sign in page, there is a code in the url
+        if 'code' in st.experimental_get_query_params():  
+            auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
+            sp = spotipy.Spotify(auth_manager=auth_manager)  
+        else:  # if no code, add a button linking to the log in url
+            st.button(auth_url, 'Log in')  # this adds a button linking to the authorization page
     return sp
+
 
 #初期表示
 def initial_display():
