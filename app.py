@@ -13,9 +13,10 @@ def main():
     with st.form('送信フォーム'):
         URL,username,genre,tempo,energy = initial_display()
         submitted = st.form_submit_button("送信")
+        sp = authorization()
 
     if submitted:
-        sp = authorization()
+        
 
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
