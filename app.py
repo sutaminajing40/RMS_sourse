@@ -76,6 +76,7 @@ def authorization():
             st.bokeh_chart(div) 
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         while not sp:
+            st.write('待機中')
             time.sleep(1)
         return sp
 
