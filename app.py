@@ -73,7 +73,7 @@ def authorization():
         else:  # if no code, add a button linking to the log in url
             if st.button('Log in'):
                 js = "window.open('{}')".format(auth_url)  # New tab or window
-                js = "window.location.href = '{}'".format(os.environ['SPOTIPY_REDIRECT_URI'])  # Current tab
+                #js = "window.location.href = '{}'".format(os.environ['SPOTIPY_REDIRECT_URI'])  # Current tab
                 html = '<img src onerror="{}">'.format(js)
                 div = Div(text=html)
                 st.bokeh_chart(div) 
