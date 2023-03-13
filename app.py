@@ -20,8 +20,7 @@ def main():
         
 
     if submitted:
-        
-
+        st.write('送信されました。')
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
         with st.spinner('楽曲情報取得中...'):
