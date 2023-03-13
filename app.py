@@ -4,8 +4,9 @@ from sklearn.preprocessing import MinMaxScaler
 import streamlit as st
 import pandas as pd
 import spotipy
-import webbrowser
 from spotipy.oauth2 import SpotifyOAuth
+from bokeh.models.widgets import Div
+import os
 
 
 
@@ -71,7 +72,11 @@ def authorization():
             sp = spotipy.Spotify(auth_manager=auth_manager)  
         else:  # if no code, add a button linking to the log in url
             if st.button('Log in'):
-                webbrowser.open_new_tab(auth_url) # this adds a button linking to the authorization page
+                js = "window.open('{}')".format(auth_url)  # New tab or window
+                js = "window.location.href = '{}'".format(os.environ['SPOTIPY_REDIRECT_URI'])  # Current tab
+                html = '<img src onerror="{}">'.format(js)
+                div = Div(text=html)
+                st.bokeh_chart(div) 
                 return sp
 
 
