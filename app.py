@@ -1,4 +1,5 @@
 import datetime
+import time
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import streamlit as st
@@ -73,6 +74,8 @@ def authorization():
             div = Div(text=html)
             st.bokeh_chart(div) 
             sp = spotipy.Spotify(auth_manager=auth_manager)  
+        while not sp:
+            time.sleep(1)
         return sp
 
 
