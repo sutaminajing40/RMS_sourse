@@ -78,6 +78,7 @@ def authorization():
         while not sp:
             st.write('待機中')
             time.sleep(1)
+        st.write('ログイン完了')
         return sp
 
 
