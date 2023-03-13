@@ -58,6 +58,7 @@ class StreamlitCacheHandler(spotipy.cache_handler.CacheHandler):
 
 
 def authorization():
+    sp = ''
     scope = "playlist-modify-public"
     cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
