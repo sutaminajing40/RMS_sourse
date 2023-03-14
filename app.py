@@ -57,7 +57,6 @@ class StreamlitCacheHandler(spotipy.cache_handler.CacheHandler):
 
 
 def authorization():
-    sp = ''
     scope = "playlist-modify-public"
     cache_handler = StreamlitCacheHandler(st.session_state)  # same as the FlaskSessionCacheHandler
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope=scope,
@@ -67,6 +66,11 @@ def authorization():
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         auth_url = auth_manager.get_authorize_url()  # log in url
 
+    # if you're redirected from the sign in page, there is a code in the url
+    if 'code' in st.experimental_get_query_params():  
+        auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
+        sp = spotipy.Spotify(auth_manager=auth_manager)  
+    else:  # if no code, add a button linking to the log in url
         if st.button('Log in'):
             js = "window.open('{}')".format(auth_url)  # New tab or window
             #js = "window.location.href = '{}'".format(os.environ['SPOTIPY_REDIRECT_URI'])  # Current tab
@@ -74,13 +78,6 @@ def authorization():
             div = Div(text=html)
             st.bokeh_chart(div) 
             sp = spotipy.Spotify(auth_manager=auth_manager)  
-        i = 0
-        while not sp:
-            st.write('待機中,{}'.format(i))
-            time.sleep(1)
-            i+=1
-        
-
     return sp
 
 
