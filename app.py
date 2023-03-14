@@ -14,6 +14,7 @@ import os
 
 def main():
     sp = authorization()
+    st.write('sp : {}'.format(sp))
     with st.form('送信フォーム'):
         URL,username,genre,tempo,energy = initial_display()
         submitted = st.form_submit_button("送信")
@@ -79,7 +80,7 @@ def authorization():
             st.write('待機中,{}'.format(i))
             time.sleep(1)
             i+=1
-        st.write('sp : {}'.format(sp))
+        
 
     return sp
 
