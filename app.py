@@ -72,6 +72,7 @@ def authorization():
         auth_manager.get_access_token(st.experimental_get_query_params()['code'])  # use the code to generate the token
         sp = spotipy.Spotify(auth_manager=auth_manager)  
         st.write('2')
+        return sp
     else:  # if no code, add a button linking to the log in url
         st.write('3')
         if st.button('Log in'):
@@ -82,7 +83,7 @@ def authorization():
             div = Div(text=html)
             st.bokeh_chart(div) 
             sp = spotipy.Spotify(auth_manager=auth_manager)
-    return sp
+            return sp
 
 
 #初期表示
