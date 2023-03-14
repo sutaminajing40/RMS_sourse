@@ -81,7 +81,7 @@ def authorization():
             i+=1
         st.write('sp : {}'.format(sp))
 
-        return sp
+    return sp
 
 
 #初期表示
