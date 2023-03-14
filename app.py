@@ -18,6 +18,7 @@ def main():
     with st.form('送信フォーム'):
         URL,username,genre,tempo,energy = initial_display()
         submitted = st.form_submit_button("送信")
+        st.write('送信フォーム')
         
 
     if submitted:
