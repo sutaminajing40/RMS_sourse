@@ -13,15 +13,13 @@ import os
 
 
 def main():
-    sp = authorization()
-    st.write('sp : {}'.format(sp))
     with st.form('送信フォーム'):
         URL,username,genre,tempo,energy = initial_display()
         submitted = st.form_submit_button("送信")
-        st.write('送信フォーム')
         
 
     if submitted:
+        sp = authorization()
         st.write('送信されました。')
         with st.spinner('プレイリスト取得中...'):
             playlist_items = url_to_items(sp,URL)
